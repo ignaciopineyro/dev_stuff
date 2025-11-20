@@ -1,21 +1,7 @@
 # Web Apps
 
-## Concurrency
-
-## Parallelism
-
-## Multiprocesing
-
-## Multithreading
-
-## Event loop / async
-
-## AsyncIO
-
-## Context switch
+## Sync servers vs Async servers
 
 ## wsgi vs asgi
 
 ## Websockets
-
-## CPython
