@@ -10,5 +10,7 @@ This repository contains a comprehensive collection of programming concepts, alg
 - **[Data Structures](data_structures.md)** - Implementation and examples of fundamental data structures
 - **[Algorithms](algorithms.md)** - Various algorithms including sorting, searching, and more
 - **[Design Patterns](design_patterns.md)** - Common software design patterns with Python examples
+- **[Python](python.md)** - How Python works behind the scene
 - **[Web Apps](web_apps.md)** - Understanding how web Apps work
 - **[Frameworks](frameworks.md)** - Popular Python frameworks
+- **[AI/ML](ai_ml.md)** - AI and Machine Learning concepts
