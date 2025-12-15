@@ -86,3 +86,57 @@ This architecture ensures that each component operates within its area of expert
 ## wsgi vs asgi
 
 ## Websockets
+
+## Idempotency
+
+Se tiene una API de procesamiento de pagos:
+1. User places order
+2. Payments API invoked
+3. API triggers Lambda function
+4. Writing in DB and charge customer via Stripe
+
+Que pasa si el frontend esta laggy y el boton para pagar se apreta dos veces? Se le cobraria dos veces al user -> MAL
+
+Para solucionar esto, estas APIs tienen que ser Idempotentes. Que sea idempotente significa que el efecto pretendido de un metodo en cualquier request identica es igual. Para implementar la idempotencia en este caso:
+
+1. Cuando el user genera la request se crea una idempotency key.que se pasará a lo largo de las APIs (esta key la recibe la Lambda y la pasa a la DB y a Stripe tambien)
+2. En la DB se verifica si ya existe una key igual y en caso de que exista retorna sin hacer el cargo en Stripe
+
+## Authentication
+
+1. Basic Authorization
+Por cada request se incluye un header "Authorization Basic <base64(username:password)>" (una version base64 encoded de las credenciales del user). Estos datos los usa el backend para validar contra los registrados en la DB. El problema es que se están compartiendo credenciales sin encriptar en cada request
+
+2. Session Auth
+Se hace una request con username y password que se usan para validar del lado del backend y se les atribuye una SessionID via cookie que se guarda en memoria del lado del servidor. Para el resto de las requests del cliente se incluye ese SessionID que se puede valir contra lo que tiene en memoria el servidor. De esta manera no se envia el username y la password todo el tiempo. El problema es que esta solucion no funciona en un ambiente distribuido al menos que se use un estado compartido usando algo como Redis.
+
+3. JWT Auth
+El user hace un login request y el servidor usa una Secret Key para generar un JWT (Json Web Token) que se usa para validar cada request. De esta manera no se depende del guardado de la SessionID en memoria y cualquier servidor que tenga acceso a la Secret Key puede validar a ese usuario
+
+4. OAuth
+
+
+
+## Debug a slow API
+
+1. Hay que definir que es lento: P99 o promedio, 5seg o 500ms. Esto ayuda a entender donde optimizar.
+2. Chequear la red: Mucha carga puede empeorar la performance. Si este es el problema se puede implementar pagination, usar un CDN o usar caching en el navegador.
+3. Si la latencia de la red no es el problema: se puede activar el query logging para inspeccionar a fondo la DB. Si las queries tardan mucho puede tratarse de un problema de N+1, puede ser que la query no sea optima y revise una tabla completa inecesariamente o que no se use indexado. Para resolver estos problemas se puede agregar indexado donde sea necesario, utilizar caching.
+4. Si el problema no está en la DB: Puede tratarse del codigo corriendo en el backend, por ejemplo algoritmos lentos, cómputos pesados o código bloqueante que podría ser async. 
+5. Si lo que es lentos son llamadas a servicios externos: Pueden hacerse las llamadas en paralelo en lugar de una a una, agregar caching si las respuestas no cambian frecuentemente y tener timeouts.
+6. Para hacer más rápido el debugging en el futuro: Montar un dashboard con métricas de interés a monitorear y alarmas asociadas a estas.
+
+## Event Driven Architecture
+
+- En lugar de servicios llamándose entre sí via API por cada Request, un Producer crea un evento. Los consumers deciden a cuáles eventos se suscriben. 
+- Los eventos son usualmente pequeños y contienen información crítica para que los consumers actúen. (usuaalmente type, timestamp y un pequeño payload con información). En ocaciones, los consumers pueden usar estos datos para obtener más información en la DB.
+- Usualmente los eventos los maneja un Broker (RabbitMQ, Amazon SNS, Kafka). Estos brokers reciben los eventos del producer y los distribuyen a los consumers. Tipicamente pueden manejar cosas como los reintentos automáticos.
+- Todo lo que no sea necesario hacer en el momento puede ser usado con eventos, por ejemplo, envío de emails, logging analytics, actualizar search indexes, limpiar datos viejos, generar recomendaciones, etc.
+- La desventaja de los sistemas event-driven es que son mucho mas dificiles de manejar y debugear. Las fallas pueden estar en el producer, consumer, dentro de broker, en los retires o en mensajes trabados en una dead-letter queue. Se requiere distributed tracing, correlation IDs y buena disciplina de loggeo. Si no hay una buena observabilidad, la arquitectura event-driven puede volverse una caja negra.
+
+## Port forwarding, IPv4 vs IPv6
+
+## Design an online multiplayer Chess matchmaking system
+
+## Design an online game Leaderbord using Shards with Redis
+
