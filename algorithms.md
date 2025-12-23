@@ -27,60 +27,35 @@ Some typical algorithms complexities are:
 
 ---
 
-## **Prefix Sum**
+## **Search & Traversal Algorithms**
 
-https://github.com/TheAlgorithms/Python/blob/master/data_structures/arrays/prefix_sum.py
+### Binary Search
 
-The prefix sum, cumulative sum, inclusive scan, or simply scan of a sequence of numbers x0, x1, x2, ... is a second sequence of numbers y0, y1, y2, ..., the sums of prefixes (running totals) of the input sequence:
+#### [Implementation and examples](./algorithms/binarysearch.py)
 
-- $y0 = x0$
-- $y1 = x0 + x1$
-- $y2 = x0 + x1+ x2$
+![Bynary Search algorithm](./static/algorithms/binary_search.png)
 
-```
-a = [3, 4, 1, 7, 9, 1]
+Binary Search is a searching algorithm that operates on a sorted or monotonic search space, repeatedly dividing it into halves to find a target value or optimal answer in logarithmic time O(log N). To apply Binary Search algorithm:
 
-res = []
-cur_s= 0 # current sum
+- The data structure must be sorted.
+- Access to any element of the data structure should take constant time.
 
-for num in a:
-    cur_s += num
-    res.append(cur_s)
-print(res)
+1. Divide the search space into two halves by finding the middle index "mid". 
+2. Compare the middle element of the search space with the key. 
+3. If the key is found at middle element, the process is terminated.
+4. If the key is not found at middle element, choose which half will be used as the next search space.
+    - If the key is smaller than the middle element, then the left side is used for next search.
+    - If the key is larger than the middle element, then the right side is used for next search.
+5. This process is continued until the key is found or the total search space is exhausted.
 
->> [3, 7, 8, 15, 24, 25]
-```
+Time Complexity: 
+- Best Case: O(1)
+- Average Case: O(log N)
+- Worst Case: O(log N)
 
----
+Auxiliary Space: O(1), If the recursive call stack is considered then the auxiliary space will be O(log N).
 
-## **Two pointer algorithm**
-
-https://github.com/TheAlgorithms/Python/blob/master/maths/two_pointer.py
-
-Given a sorted array of numbers and a target sum, find a pair in the array whose sum is equal to the given target.
-
-Time complexity = $O(n)$, because each pointer will, at most, traverse the array once. Therefore, combined, they will traverse it twice. However, when evaluating time complexity, constants are dropped, and hence it’s $O(n)$
-
-```
-def find_pair_two_pointers(arr, target):
-    left, right = 0, len(arr) - 1
-
-    while left < right:
-        current_sum = arr[left] + arr[right]
-
-        if current_sum == target:
-            return [arr[left], arr[right]]
-        elif current_sum < target:
-            left += 1
-        else:
-            right -= 1
-
-    return None
-```
-
----
-
-## **Binary Tree BFS**
+### Binary Tree BFS
 
 https://github.com/TheAlgorithms/Python/blob/master/graphs/breadth_first_search.py
 
@@ -198,7 +173,7 @@ def levelOrder(root):
 
 ---
 
-## **Binary Tree DFS**
+### Binary Tree DFS
 
 https://github.com/TheAlgorithms/Python/blob/master/graphs/depth_first_search.py
 
@@ -272,7 +247,7 @@ def printPostorder(root):
 
 ---
 
-## **Topological Sort**
+### Topological Sort
 
 https://github.com/TheAlgorithms/Python/blob/master/sorts/topological_sort.py
 
@@ -280,21 +255,7 @@ Topological sorting for Directed Acyclic Graph (DAG - Graph with vertices and ed
 
 ---
 
-## **Top K Elements**
-
-The "Top K Elements" algorithm efficiently identifies the k most frequent or largest elements within a dataset. It leverages data structures like heaps (Heap property ensures that for any given node, its value is either greater than or equal to (max-heap) or less than or equal to (min-heap) the values of its children. Heaps are commonly used to implement priority queues and are often represented as complete binary trees, which can also be represented using arrays.) or quickselect to achieve optimal time complexity, often outperforming sorting the entire input. This pattern is widely applicable for tasks like finding popular items, trending topics, or analyzing data distributions.
-
-https://www.geeksforgeeks.org/dsa/find-k-numbers-occurrences-given-array/
-- [Naive Approach] Using hash map and Sorting
-- [Expected Approach 1] Using hash map and Max Heap
-- [Expected Approach 2] Using Counting sort
-- [Alternate Approach] Using Quick Select
-
-https://github.com/TheAlgorithms/Python/blob/master/strings/top_k_frequent_words.py
-
----
-
-## **Modified Binary Search**
+### Modified Binary Search
 
 A modified binary search algorithm is a variation of the standard binary search, adapted to solve specific problems or work on specialized data structures. It builds upon the efficiency of binary search (O(log n) time complexity) by making adjustments to handle scenarios beyond a simple sorted array. These modifications often involve handling rotated arrays, finding the first or last occurrence of an element or searching in nearly sorted arrays.
 
@@ -318,9 +279,186 @@ result = modified_binary_search(arr, target)
 print(f"Element found at index: {result}")
 ```
 
-## **Sliding window**
 
-Sliding Window Technique is a method used to solve problems that involve subarray or substring or window. The main idea is to use the results of previous window to do computations for the next window. This technique is commonly used in algorithms like finding subarrays with a specific sum, finding the longest substring with unique characters, or solving problems that require a fixed-size window to process elements efficiently.
+## **Sorting & Selection Algorithms**
+
+### Quick Sort
+
+---
+QuickSort is a sorting algorithm based on the Divide and Conquer principle (breaking down the problem into smaller sub-problems) that picks an element as a pivot and partitions the given array around the picked pivot by placing the pivot in its correct position in the sorted array.
+
+1. Choose a Pivot: Select an element from the array as the pivot (e.g., first element, last element, random element, or median).
+2. Partition the Array: Rearrange the array around the pivot. After partitioning, all elements smaller than the pivot will be on its left, and all elements greater than the pivot will be on its right. The pivot is then in its correct position, and we obtain the index of the pivot.
+3. Recursively Call: Recursively apply the same process to the two partitioned sub-arrays (left and right of the pivot).
+4. Base Case: The recursion stops when there is only one element left in the sub-array, as a single element is already sorted.
+
+```
+# Partition function
+def partition(arr, low, high):
+    
+    # Choose the pivot
+    pivot = arr[high]
+    
+    # Index of smaller element and indicates
+    # the right position of pivot found so far
+    i = low - 1
+    
+    # Traverse arr[low..high] and move all smaller
+    # elements to the left side. Elements from low to
+    # i are smaller after every iteration
+    for j in range(low, high):
+        if arr[j] < pivot:
+            i += 1
+            swap(arr, i, j)
+    
+    # Move pivot after smaller elements and
+    # return its position
+    swap(arr, i + 1, high)
+    return i + 1
+
+# Swap function
+def swap(arr, i, j):
+    arr[i], arr[j] = arr[j], arr[i]
+
+# The QuickSort function implementation
+def quickSort(arr, low, high):
+    if low < high:
+        
+        # pi is the partition return index of pivot
+        pi = partition(arr, low, high)
+        
+        # Recursion calls for smaller elements
+        # and greater or equals elements
+        quickSort(arr, low, pi - 1)
+        quickSort(arr, pi + 1, high)
+
+# Main driver code
+if __name__ == "__main__":
+    arr = [10, 7, 8, 9, 1, 5]
+    n = len(arr)
+
+    quickSort(arr, 0, n - 1)
+    
+    for val in arr:
+        print(val, end=" ")
+```
+
+---
+
+### Quick Select
+
+Quick Select Algorithm is a variation of QuickSort. The difference is, instead of recurring for both sides (after finding pivot), it recurs only for the part that contains the k-th smallest element. The logic is simple, if index of the partitioned element is more than k, then we recur for the left part. If index is the same as k, we have found the k-th smallest element and we return. If index is less than k, then we recur for the right part. This reduces the expected complexity from O(n log n) to O(n), with a worst-case of O(n^2).
+
+```
+# Standard partition process of QuickSort(). It considers the last element as pivot and moves all smaller element to left of it and greater elements to right
+def partition(arr, l, r):
+    
+    x = arr[r]
+    i = l
+    for j in range(l, r):
+        
+        if arr[j] <= x:
+            arr[i], arr[j] = arr[j], arr[i]
+            i += 1
+            
+    arr[i], arr[r] = arr[r], arr[i]
+    return i
+
+# Finds the kth position (of the sorted array) in a given unsorted array i.e this function. It can be used to find both kth largest and kth smallest element in the array. ASSUMPTION: all elements in arr[] are distinct
+def kthSmallest(arr, l, r, k):
+
+    # if k is smaller than number of
+    # elements in array
+    if (k > 0 and k <= r - l + 1):
+
+        # Partition the array around last
+        # element and get position of pivot
+        # element in sorted array
+        index = partition(arr, l, r)
+
+        # if position is same as k
+        if (index - l == k - 1):
+            return arr[index]
+
+        # If position is more, recur
+        # for left subarray
+        if (index - l > k - 1):
+            return kthSmallest(arr, l, index - 1, k)
+
+        # Else recur for right subarray
+        return kthSmallest(arr, index + 1, r,
+                            k - index + l - 1)
+    print("Index out of bound")
+
+# Driver Code
+arr = [ 10, 4, 5, 8, 6, 11, 26 ]
+n = len(arr)
+k = 3
+print("K-th smallest element is ", end = "")
+print(kthSmallest(arr, 0, n - 1, k))
+
+```
+
+## **Array/List Processing Patterns**
+
+### Prefix Sum
+
+https://github.com/TheAlgorithms/Python/blob/master/data_structures/arrays/prefix_sum.py
+
+The prefix sum, cumulative sum, inclusive scan, or simply scan of a sequence of numbers x0, x1, x2, ... is a second sequence of numbers y0, y1, y2, ..., the sums of prefixes (running totals) of the input sequence:
+
+- $y0 = x0$
+- $y1 = x0 + x1$
+- $y2 = x0 + x1+ x2$
+
+```
+a = [3, 4, 1, 7, 9, 1]
+
+res = []
+cur_s= 0 # current sum
+
+for num in a:
+    cur_s += num
+    res.append(cur_s)
+print(res)
+
+>> [3, 7, 8, 15, 24, 25]
+```
+
+---
+
+### Two pointers algorithm
+
+#### [Implementation and examples](./algorithms/twopointers.py)
+
+![Two pointers algorithm](./static/algorithms/two_pointers.png)
+
+The Two-Pointers Technique is a simple yet powerful strategy where you use two indices (pointers) that traverse a data structure—such as an array, list, or string—either toward each other or in the same direction to solve problems more efficiently. Generally, two-pointer algorithms have the following characteristics:
+
+- Two moving pointers, regardless of directions, moving dependently or independently;
+- A function that utilizes the entries referenced by the two pointers, which relates to the answer in a way;
+- An easy way of deciding which pointer to move;
+- A way to process the array when the pointers are moved.
+
+Time complexity = $O(n)$, because each pointer will, at most, traverse the array once. Therefore, combined, they will traverse it twice. However, when evaluating time complexity, constants are dropped, and hence it’s $O(n)$
+
+Typical case scenarios to use two-pointers are:
+
+- Sorted Input : If the array or list is already sorted (or can be sorted), two pointers can efficiently find pairs or ranges. Example: Find two numbers in a sorted array that add up to a target.
+- Pairs or Subarrays : When the problem asks about two elements, subarrays, or ranges instead of working with single elements. Example: Longest substring without repeating characters, maximum consecutive ones, checking if a string is palindrome.
+- Sliding Window Problems : When you need to maintain a window of elements that grows/shrinks based on conditions. Example: Find smallest subarray with sum ≥ K, move all zeros to end while maintaining order.
+- Linked Lists (Slow–Fast pointers) : Detecting cycles, finding the middle node, or checking palindrome property. Example: Floyd’s Cycle Detection Algorithm (Tortoise and Hare).
+
+
+---
+
+### Sliding window
+
+#### [Implementation and examples](./algorithms/slidingwindow.py)
+
+![Two pointers algorithm](./static/algorithms/sliding_window.png)
+
+Sliding Window is an extension of the Two-pointers algorithm used to solve problems that involve subarray or substring or window. The main idea is to use the results of previous window to do computations for the next window. This technique is commonly used in algorithms like finding subarrays with a specific sum, finding the longest substring with unique characters, or solving problems that require a fixed-size window to process elements efficiently.
 
 There are basically two types of sliding window:
 
@@ -336,88 +474,9 @@ There are basically two types of sliding window:
 - We follow these steps until we reach to the end of the array.
 
 
-```
-import sys
+## **Data Structure Specific Algorithms**
 
-# O(n * k) solution for finding maximum sum of a subarray of size k
-# Returns maximum sum in a subarray of size k.
-
-
-def maxSum(arr, n, k):
-    # Initialize result
-    max_sum = -sys.maxsize
-
-    # Consider all blocks starting with i.
-    for i in range(n - k + 1):
-        current_sum = 0
-        for j in range(k):
-            current_sum = current_sum + arr[i + j]
-
-        # Update result if required.
-        max_sum = max(current_sum, max_sum)
-
-    return max_sum
-
-
-# Driver code
-arr = [1, 4, 2, 10, 2, 3, 1, 0, 20]
-k = 4
-n = len(arr)
-print(maxSum(arr, n, k))
-
->>> 24
-```
-
----
-
-## **Fast & Slow Pointer**
-
-The Fast and Slow Pointers pattern involves using two pointers that iterate through a data structure at different speeds. Typically, the “slow” pointer moves one step at a time, while the “fast” pointer moves two steps. This approach helps in detecting cycles and finding midpoints in linked lists and arrays.
-
-When slow pointer enters the loop, the fast pointer must be inside the loop.
-if we consider movements of slow and fast pointers, we can notice that distance between them (from slow to fast) increase by one after every iteration.
-
-```
-# Python program to detect loop in a linked list using Floyd's Cycle-Finding Algorithm
-
-class Node:
-    def __init__(self, x):
-        self.data = x
-        self.next = None
-
-def detectLoop(head):
-    # Fast and slow pointers initially points to the head
-    slow = head
-    fast = head
-
-    # Loop that runs while fast and slow pointer are not None and not equal
-    while slow and fast and fast.next:
-        slow = slow.next
-        fast = fast.next.next
-
-        # If fast and slow pointer points to the same node, then the cycle is detected
-        if slow == fast:
-            return True
-    return False
-
-if __name__ == "__main__":
-    # Create a hard-coded linked list: 1 -> 3 -> 4
-    head = Node(1)
-    head.next = Node(3)
-    head.next.next = Node(4)
-  
-    # Create a loop
-    head.next.next.next = head.next
-
-    if detectLoop(head):
-        print("true")
-    else:
-        print("false")
-```
-
----
-
-## **Linked List In-Place Reversal**
+### Linked List In-Place Reversal
 
 In-place reversal of a linked list is a technique where we reverse the direction of the links between nodes without using any additional data structure. This approach has several advantages:
 
@@ -524,179 +583,7 @@ arr = [2, 1, 2, 4, 3]
 print(monotonic_decreasing_stack(arr))
 ```
 
----
-
-## **Quick Sort**
-
----
-QuickSort is a sorting algorithm based on the Divide and Conquer principle (breaking down the problem into smaller sub-problems) that picks an element as a pivot and partitions the given array around the picked pivot by placing the pivot in its correct position in the sorted array.
-
-1. Choose a Pivot: Select an element from the array as the pivot (e.g., first element, last element, random element, or median).
-2. Partition the Array: Rearrange the array around the pivot. After partitioning, all elements smaller than the pivot will be on its left, and all elements greater than the pivot will be on its right. The pivot is then in its correct position, and we obtain the index of the pivot.
-3. Recursively Call: Recursively apply the same process to the two partitioned sub-arrays (left and right of the pivot).
-4. Base Case: The recursion stops when there is only one element left in the sub-array, as a single element is already sorted.
-
-```
-# Partition function
-def partition(arr, low, high):
-    
-    # Choose the pivot
-    pivot = arr[high]
-    
-    # Index of smaller element and indicates
-    # the right position of pivot found so far
-    i = low - 1
-    
-    # Traverse arr[low..high] and move all smaller
-    # elements to the left side. Elements from low to
-    # i are smaller after every iteration
-    for j in range(low, high):
-        if arr[j] < pivot:
-            i += 1
-            swap(arr, i, j)
-    
-    # Move pivot after smaller elements and
-    # return its position
-    swap(arr, i + 1, high)
-    return i + 1
-
-# Swap function
-def swap(arr, i, j):
-    arr[i], arr[j] = arr[j], arr[i]
-
-# The QuickSort function implementation
-def quickSort(arr, low, high):
-    if low < high:
-        
-        # pi is the partition return index of pivot
-        pi = partition(arr, low, high)
-        
-        # Recursion calls for smaller elements
-        # and greater or equals elements
-        quickSort(arr, low, pi - 1)
-        quickSort(arr, pi + 1, high)
-
-# Main driver code
-if __name__ == "__main__":
-    arr = [10, 7, 8, 9, 1, 5]
-    n = len(arr)
-
-    quickSort(arr, 0, n - 1)
-    
-    for val in arr:
-        print(val, end=" ")
-```
-
----
-
-## **Quick Select**
-
-Quick Select Algorithm is a variation of QuickSort. The difference is, instead of recurring for both sides (after finding pivot), it recurs only for the part that contains the k-th smallest element. The logic is simple, if index of the partitioned element is more than k, then we recur for the left part. If index is the same as k, we have found the k-th smallest element and we return. If index is less than k, then we recur for the right part. This reduces the expected complexity from O(n log n) to O(n), with a worst-case of O(n^2).
-
-```
-# Standard partition process of QuickSort(). It considers the last element as pivot and moves all smaller element to left of it and greater elements to right
-def partition(arr, l, r):
-    
-    x = arr[r]
-    i = l
-    for j in range(l, r):
-        
-        if arr[j] <= x:
-            arr[i], arr[j] = arr[j], arr[i]
-            i += 1
-            
-    arr[i], arr[r] = arr[r], arr[i]
-    return i
-
-# Finds the kth position (of the sorted array) in a given unsorted array i.e this function. It can be used to find both kth largest and kth smallest element in the array. ASSUMPTION: all elements in arr[] are distinct
-def kthSmallest(arr, l, r, k):
-
-    # if k is smaller than number of
-    # elements in array
-    if (k > 0 and k <= r - l + 1):
-
-        # Partition the array around last
-        # element and get position of pivot
-        # element in sorted array
-        index = partition(arr, l, r)
-
-        # if position is same as k
-        if (index - l == k - 1):
-            return arr[index]
-
-        # If position is more, recur
-        # for left subarray
-        if (index - l > k - 1):
-            return kthSmallest(arr, l, index - 1, k)
-
-        # Else recur for right subarray
-        return kthSmallest(arr, index + 1, r,
-                            k - index + l - 1)
-    print("Index out of bound")
-
-# Driver Code
-arr = [ 10, 4, 5, 8, 6, 11, 26 ]
-n = len(arr)
-k = 3
-print("K-th smallest element is ", end = "")
-print(kthSmallest(arr, 0, n - 1, k))
-
-```
-
----
-
-## **Overlapping Intervals**
-
-Overlapping Intervals ussually refers to two common problems:
-
-- Detect overlaps in a range list
-- Merge overlapping ranges into a compact, redundancy-free version.
-
-1. Detect overlaps in a range list : You sort the intervals by their start. Then you iterate through and compare the start of the current interval with the end of the previous one: if the start is before the previous end, there is an overlap. Complexity O(n log n).
-
-```
-def hay_solapamiento(intervalos):
-    if not intervalos:
-        return False
-    # Ordenar por inicio
-    intervalos.sort(key=lambda x: x[0])
-    prev_end = intervalos[0][1]
-    for start, end in intervalos[1:]:
-        if start < prev_end:  # overlap
-            return True
-        prev_end = max(prev_end, end)
-    return False
-
-# Ejemplo
-intervalos = [(1, 3), (2, 4), (5, 6)]
-print(hay_solapamiento(intervalos))  # True
-
-```
-
-2. Merge overlapping ranges into a compact, redundancy-free version: You sort by start and build a resulting list by extending the current interval if there is overlap. Complexity O(n).
-
-```
-def fusionar_intervalos(intervalos):
-    if not intervalos:
-        return []
-    intervalos.sort(key=lambda x: x[0])
-    resultado = []
-    current_start, current_end = intervalos[0]
-    for start, end in intervalos[1:]:
-        if start <= current_end:  # hay solapamiento
-            current_end = max(current_end, end)
-        else:
-            resultado.append((current_start, current_end))
-            current_start, current_end = start, end
-    resultado.append((current_start, current_end))
-    return resultado
-
-# Ejemplo
-intervalos = [(1, 3), (2, 4), (5, 6), (5, 8)]
-print(fusionar_intervalos(intervalos))  # [(1, 4), (5, 8)]
-```
-
----
+## **Matrix Processing Algorithms**
 
 ## **Spiral Matrix Traversal**
 
@@ -886,9 +773,80 @@ print(zigzag_traverse(matrix))
 # Output: [1, 2, 5, 9, 6, 3, 4, 7, 10, 13, 14, 11, 8, 12, 15, 16]
 ```
 
+## **Optimization & Problem-Solving Paradigms**
+
+### Top K Elements
+
+The "Top K Elements" algorithm efficiently identifies the k most frequent or largest elements within a dataset. It leverages data structures like heaps (Heap property ensures that for any given node, its value is either greater than or equal to (max-heap) or less than or equal to (min-heap) the values of its children. Heaps are commonly used to implement priority queues and are often represented as complete binary trees, which can also be represented using arrays.) or quickselect to achieve optimal time complexity, often outperforming sorting the entire input. This pattern is widely applicable for tasks like finding popular items, trending topics, or analyzing data distributions.
+
+https://www.geeksforgeeks.org/dsa/find-k-numbers-occurrences-given-array/
+- [Naive Approach] Using hash map and Sorting
+- [Expected Approach 1] Using hash map and Max Heap
+- [Expected Approach 2] Using Counting sort
+- [Alternate Approach] Using Quick Select
+
+https://github.com/TheAlgorithms/Python/blob/master/strings/top_k_frequent_words.py
+
 ---
 
-## **Backtracking**
+### Overlapping Intervals
+
+Overlapping Intervals ussually refers to two common problems:
+
+- Detect overlaps in a range list
+- Merge overlapping ranges into a compact, redundancy-free version.
+
+1. Detect overlaps in a range list : You sort the intervals by their start. Then you iterate through and compare the start of the current interval with the end of the previous one: if the start is before the previous end, there is an overlap. Complexity O(n log n).
+
+```
+def hay_solapamiento(intervalos):
+    if not intervalos:
+        return False
+    # Ordenar por inicio
+    intervalos.sort(key=lambda x: x[0])
+    prev_end = intervalos[0][1]
+    for start, end in intervalos[1:]:
+        if start < prev_end:  # overlap
+            return True
+        prev_end = max(prev_end, end)
+    return False
+
+# Ejemplo
+intervalos = [(1, 3), (2, 4), (5, 6)]
+print(hay_solapamiento(intervalos))  # True
+
+```
+
+2. Merge overlapping ranges into a compact, redundancy-free version: You sort by start and build a resulting list by extending the current interval if there is overlap. Complexity O(n).
+
+```
+def fusionar_intervalos(intervalos):
+    if not intervalos:
+        return []
+    intervalos.sort(key=lambda x: x[0])
+    resultado = []
+    current_start, current_end = intervalos[0]
+    for start, end in intervalos[1:]:
+        if start <= current_end:  # hay solapamiento
+            current_end = max(current_end, end)
+        else:
+            resultado.append((current_start, current_end))
+            current_start, current_end = start, end
+    resultado.append((current_start, current_end))
+    return resultado
+
+# Ejemplo
+intervalos = [(1, 3), (2, 4), (5, 6), (5, 8)]
+print(fusionar_intervalos(intervalos))  # [(1, 4), (5, 8)]
+```
+
+---
+
+
+
+---
+
+### Backtracking
 
 Backtracking is a problem-solving algorithmic technique that involves finding a solution incrementally by trying different options and undoing them if they lead to a dead end. The backtracking algorithm is a recursive algorithm that is used to solve problems by making a series of choices, and if a choice leads to a dead end, it backtracks to the last valid choice made and tries a different path. It is often used to solve problems such as searching for a path in a maze, the N-Queens puzzle, Sudoku, and the Knight's Tour.
 
@@ -966,7 +924,7 @@ for solution in result2:
 
 ---
 
-## **Dynamic Programming**
+### Dynamic Programming
 
 Dynamic Programming (DP) is a method for solving problems by breaking them down into overlapping subproblems, solving each subproblem once, and storing its result to avoid recomputation. It is especially useful when:
 

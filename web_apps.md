@@ -2,8 +2,6 @@
 
 ## Sync servers vs Async servers
 
-## Websockets
-
 ## Request life cycle
 
 When a client sends a request to a web server and receives a response, a sophisticated orchestration of components works together behind the scenes. Understanding this lifecycle is crucial for web developers to optimize performance, debug issues, and design scalable architectures.
@@ -80,8 +78,6 @@ Client Request
 ```
 
 This architecture ensures that each component operates within its area of expertise, creating a robust, scalable, and maintainable web application infrastructure.
-
-## Authorization
 
 ## wsgi vs asgi
 
@@ -170,16 +166,18 @@ However, OAuth introduces implementation complexity that can create security vul
 5. Si lo que es lentos son llamadas a servicios externos: Pueden hacerse las llamadas en paralelo en lugar de una a una, agregar caching si las respuestas no cambian frecuentemente y tener timeouts.
 6. Para hacer más rápido el debugging en el futuro: Montar un dashboard con métricas de interés a monitorear y alarmas asociadas a estas.
 
-## Event Driven Architecture
-
-- En lugar de servicios llamándose entre sí via API por cada Request, un Producer crea un evento. Los consumers deciden a cuáles eventos se suscriben.
-- Los eventos son usualmente pequeños y contienen información crítica para que los consumers actúen. (usuaalmente type, timestamp y un pequeño payload con información). En ocaciones, los consumers pueden usar estos datos para obtener más información en la DB.
-- Usualmente los eventos los maneja un Broker (RabbitMQ, Amazon SNS, Kafka). Estos brokers reciben los eventos del producer y los distribuyen a los consumers. Tipicamente pueden manejar cosas como los reintentos automáticos.
-- Todo lo que no sea necesario hacer en el momento puede ser usado con eventos, por ejemplo, envío de emails, logging analytics, actualizar search indexes, limpiar datos viejos, generar recomendaciones, etc.
-- La desventaja de los sistemas event-driven es que son mucho mas dificiles de manejar y debugear. Las fallas pueden estar en el producer, consumer, dentro de broker, en los retires o en mensajes trabados en una dead-letter queue. Se requiere distributed tracing, correlation IDs y buena disciplina de loggeo. Si no hay una buena observabilidad, la arquitectura event-driven puede volverse una caja negra.
 
 ## Port forwarding, IPv4 vs IPv6
 
-## Design an online multiplayer Chess matchmaking system
 
-## Design an online game Leaderbord using Shards with Redis
+## Proxy/Reverse Proxy
+
+Un proxy actua como intermediario entre el cliente y la red. Cuando el cliente ejecuta una request, el proxy la dirige a la red y finalmente al servidor indicado para luego volver a recibir la response. El proxy esconde la IP agregando una capa de privacidad para la locacion y la identidad del cliente. 
+
+Un reverse-proxy funciona de igual manera pero del lado del servidor, en lugar del lado del cliente. Intercepta las request luego de la red y las dirige a un servidor determinado de acuerdo a reglas predefinidas. 
+
+## API Gateway
+
+## RestAPI
+
+## GraphQL

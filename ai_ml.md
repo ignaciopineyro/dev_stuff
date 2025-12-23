@@ -314,7 +314,14 @@ This hybrid approach leverages the strengths of both methods, providing a robust
 
 ## MCP
 
+### Overview
+
 MCP (Model Context Protocol) is an open-source standard for connecting AI applications to external systems. Using MCP, AI applications like Claude or ChatGPT can connect to data sources (e.g. local files, databases), tools (e.g. search engines, calculators) and workflows (e.g. specialized prompts)—enabling them to access key information and perform tasks. Think of MCP like a USB-C port for AI applications. Just as USB-C provides a standardized way to connect electronic devices, MCP provides a standardized way to connect AI applications to external systems.
+
+The great advantage of MCP servers is that they take the burden of tool definitions and execution our servers had. They provide access to data or functionality implemented by some outside service.
+
+![MCP Architecture](./static/ai_ml/mcp_architecture.png)
+
 
 ### What can MCP enable?
 - Agents can access your Google Calendar and Notion, acting as a more personalized AI assistant.
@@ -322,12 +329,22 @@ MCP (Model Context Protocol) is an open-source standard for connecting AI applic
 - Enterprise chatbots can connect to multiple databases across an organization, empowering users to analyze data using chat.
 - AI models can create 3D designs on Blender and print them out using a 3D printer.
 
-### Why does MCP matter?
-Depending on where you sit in the ecosystem, MCP can have a range of benefits.
+### MCP server primitives
 
-- Developers: MCP reduces development time and complexity when building, or integrating with, an AI application or agent.
-- AI applications or agents: MCP provides access to an ecosystem of data sources, tools and apps which will enhance capabilities and improve the end-user experience.
-- End-users: MCP results in more capable AI applications or agents which can access your data and take actions on your behalf when necessary.
+- **Tools**: Model-controlled. LLM decides when to call these and the results are used by the LLM. They are used to give additional functionality to the LLM.
+- **Resources**: App-controlled. Our App decides when to call these. Results are used primarily by our App. Resources are used for getting data into our App and adding context to messages.
+- **Prompts**: User-controlled: The user decides when to use these. Prompts are used for workflows to run based on user input, like a slash command, button click or menu option.
+
+### MCP Client and communication
+
+![MCP Communication](./static/ai_ml/mcp_communication.png)
+
+The MCP client serves as the communication bridge between your server and MCP servers. It's your access point to all the tools that an MCP server provides, handling the message exchange and protocol details so your application doesn't have to.
+
+One of MCP's key strengths is being transport agnostic (client and server can communicate over different protocols). They can connect over standard IO (if running client and server locally), HTTP, WebSockets, etc.
+
+The MCP server and client communicate by exchanging messages (the messages allowed are defined in the MCP spec). Some typical messages are `ListToolsRequest`/`ListToolsResult` (to know the tools available in the server) and `CallToolRequest`/`CallToolResult` (to run a particular tool with arguments).
+
 
 
 ## LLM Cache
