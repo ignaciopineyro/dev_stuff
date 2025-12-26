@@ -1,6 +1,9 @@
 # Maximum Average Subarray I - https://leetcode.com/problems/maximum-average-subarray-i/description/?envType=problem-list-v2&envId=sliding-window
 # Time Complexity: O(n)
 # Space Complexity: O(1)
+from typing import List
+
+
 def findMaxAverage(self, nums, k):
     """
     :type nums: List[int]
@@ -38,3 +41,22 @@ def lengthOfLongestSubstring(self, s):
         max_len = max(max_len, right - left + 1)
 
     return max_len
+
+
+# Minimum Operations to Make Binary Array Elements Equal to One I - https://leetcode.com/problems/minimum-operations-to-make-binary-array-elements-equal-to-one-i/description/
+# Time Complexity: O(n)
+# Space Complexity: O(1)
+def minOperations(nums: List[int]) -> int:
+    result = 0
+
+    for i in range(len(nums) - 2):
+        if nums[i] == 0:
+            nums[i] ^= 1
+            nums[i + 1] ^= 1
+            nums[i + 2] ^= 1
+            result += 1
+
+    if not (nums[len(nums) - 3] == nums[len(nums) - 2] == nums[len(nums) - 1]):
+        return -1
+
+    return result

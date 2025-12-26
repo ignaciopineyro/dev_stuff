@@ -1,6 +1,9 @@
 # Count pairs whose sum is less than target - https://leetcode.com/problems/count-pairs-whose-sum-is-less-than-target/description/?envType=problem-list-v2&envId=two-pointers
 # Time complexity: O(n log n) due to sorting
 # Space complexity: O(1) if we ignore the space used by sorting
+from typing import List
+
+
 def countPairs(nums, target):
     """
     :type nums: List[int]
@@ -117,3 +120,22 @@ def middleNode(self, head):
         fp = fp.next.next
 
     return sp
+
+
+# Rearrange Array Elements by Sign - https://leetcode.com/problems/rearrange-array-elements-by-sign/description/?envType=problem-list-v2&envId=two-pointers
+# Time complexity: O(n)
+# Space complexity: O(1)
+def rearrangeArray(self, nums: List[int]) -> List[int]:
+    result = [0] * len(nums)
+    pos_idx = 0
+    neg_idx = 1
+
+    for num in nums:
+        if num > 0:
+            result[pos_idx] = num
+            pos_idx += 2
+        else:
+            result[neg_idx] = num
+            neg_idx += 2
+
+    return result

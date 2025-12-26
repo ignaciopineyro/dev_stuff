@@ -57,127 +57,29 @@ Auxiliary Space: O(1), If the recursive call stack is considered then the auxili
 
 ### Binary Tree BFS
 
-https://github.com/TheAlgorithms/Python/blob/master/graphs/breadth_first_search.py
+#### [Implementation and examples](./algorithms/bfs.py)
 
-https://github.com/TheAlgorithms/Python/blob/master/graphs/breadth_first_search_2.py
+![BFS algorithm](./static/algorithms/bfs.png)
 
 Breadth-First Search (BFS or Level Order Traversal) for Binary Trees is one of the two main ways to traverse nodes of the Binary Tree (Hierarchical data structure in which each node has at most two children, referred to as the left child and the right child). In BFS the traversing is done such that all nodes present in the same level are traversed completely before traversing the next level.
 
 To traverse all the nodes of a lower level before moving to any of the nodes of a higher level a recursive or a iterative algorithm can be implemented:
 
-Binary Tree definition:
-
-```
-class Node:
-    def __init__(self, value):
-        self.data = value
-        self.left = None
-        self.right = None
-
-if __name__ == "__main__":
-    # Create binary tree
-    #      1         
-    #     / \       
-    #    3   2      
-    #          \   
-    #           4
-    #          /  \
-    #         6    5
-    root = Node(1)
-    root.left = Node(3)
-    root.right = Node(2)
-    root.right.right = Node(4)
-    root.right.right.left = Node(6)
-    root.right.right.right = Node(5)
-
-    # Perform level order traversal
-    res = levelOrder(root)
-
-    # Print the result
-    for level in res:
-        for data in level:
-            print(data, end=" ")
-```
-
-1. Stack (Recursive) implementation:
+1. **Stack (Recursive)** implementation:
 
 The idea is to traverse the tree recursively, passing the current node and its level, starting with the root at level 0. For each visited node, its value is added to the result array, by considering the value of current level as an index in the result array.
 
+2. **Queue (Iterative)** implementation:
 
-```
-def levelOrderRec(root, level, res):
-    if not root:
-        return
-
-    # Add a new level to the result if needed
-    if len(res) <= level:
-        res.append([])
-
-    # Add current node's data to its corresponding level
-    res[level].append(root.data)
-
-    # Recur for left and right children
-    levelOrderRec(root.left, level + 1, res)
-    levelOrderRec(root.right, level + 1, res)
-
-# Function to perform level order traversal
-def levelOrder(root):
-    res = []
-    levelOrderRec(root, 0, res)
-    return res
-
->> 1 3 2 4 6 5
-```
-
-2. Queue (Iterative) implementation:
-
-Looking at the examples, it’s clear that tree nodes need to be traversed level by level from top to bottom. Since the tree structure allows us to access nodes starting from the root and moving downward, this process naturally follows a First-In-First-Out (FIFO) order. So we can use queue data structure to perform level order traversal.
-
-
-
-```
-def levelOrder(root):
-    if root is None:
-        return []
-
-    # Create an empty queue for level order traversal
-    q = deque()
-    res = []
-
-    # Enqueue Root
-    q.append(root)
-    currLevel = 0
-
-    while q:
-        len_q = len(q)
-        res.append([])
-
-        for _ in range(len_q):
-            # Add front of queue and remove it from queue
-            node = q.popleft()
-            res[currLevel].append(node.data)
-
-            # Enqueue left child
-            if node.left is not None:
-                q.append(node.left)
-
-            # Enqueue right child
-            if node.right is not None:
-                q.append(node.right)
-        currLevel += 1
-
-    return res
-
->> 1 3 2 4 6 5
-```
+Since the tree structure allows us to access nodes starting from the root and moving downward, this process naturally follows a First-In-First-Out (FIFO) order. So we can use queue data structure to perform level order traversal.
 
 ---
 
 ### Binary Tree DFS
 
-https://github.com/TheAlgorithms/Python/blob/master/graphs/depth_first_search.py
+#### [Implementation and examples](./algorithms/dfs.py)
 
-https://github.com/TheAlgorithms/Python/blob/master/graphs/depth_first_search_2.py
+![DFS algorithm](./static/algorithms/dfs.png)
 
 Depth-first search is the other main technique used for traversing trees or graphs that differs from BFS in that it uses backtracking for traversal. In this traversal first, the deepest node is visited and then backtracks to its parent node if no sibling of that node exists. There are three ways to implement DFS:
 
@@ -186,64 +88,15 @@ Depth-first search is the other main technique used for traversing trees or grap
     - Visit the root
     - Traverse the right subtree, i.e., call Inorder(right-subtree)
 
-```
-def printInorder(root):
-    if root:
-        # First recur on left child
-        printInorder(root.left)
-
-        # then print the data of node
-        print(root.val),
-
-        # now recur on right child
-        printInorder(root.right)
-
->> Inorder traversal of binary tree is
-    4 2 5 1 3
-```
-
 2. Preorder Traversal:
     - Visit the root
     - Traverse the left subtree, i.e., call Preorder(left-subtree)
     - Traverse the right subtree, i.e., call Preorder(right-subtree)
 
-```
-def printPreorder(root):
-    if root:
-        # First print the data of node
-        print(root.val),
-
-        # Then recur on left child
-        printPreorder(root.left)
-
-        # Finally recur on right child
-        printPreorder(root.right)
-
->> Preorder traversal of binary tree is
-    1 2 4 5 3
-```
-
 3. Postorder Traversal:
     - Traverse the left subtree, i.e., call Postorder(left-subtree)
     - Traverse the right subtree, i.e., call Postorder(right-subtree)
     - Visit the root.
-
-
-```
-def printPostorder(root):
-    if root:
-        # First recur on left child
-        printPostorder(root.left)
-
-        # the recur on right child
-        printPostorder(root.right)
-
-        # now print the data of node
-        print(root.val)
-
->> Postorder traversal of binary tree is
-    4 5 2 3 1
-```
 
 ---
 

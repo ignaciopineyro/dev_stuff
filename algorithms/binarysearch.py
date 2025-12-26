@@ -69,3 +69,25 @@ def search_range(nums: List[int], target: int) -> List[int]:
         return [lo, hi]
 
     return [-1, -1]
+
+
+# Count negative numbers in a sorted matrix - https://leetcode.com/problems/count-negative-numbers-in-a-sorted-matrix/description/?envType=problem-list-v2&envId=binary-search
+# Time Complexity: O(m log n) where m is number of rows and n is number of columns
+# Space Complexity: O(1)
+def countNegatives(grid: List[List[int]]) -> int:
+    result = 0
+
+    for row in grid:
+        lp, rp = 0, len(grid[0]) - 1
+        while lp <= rp:
+            mid = (lp + rp) // 2
+
+            if row[mid] < 0:
+                rp = mid - 1
+            else:
+                lp = mid + 1
+
+        if lp < len(row):
+            result += len(row) - lp
+
+    return result
