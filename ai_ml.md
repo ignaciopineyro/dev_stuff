@@ -329,11 +329,130 @@ The great advantage of MCP servers is that they take the burden of tool definiti
 - Enterprise chatbots can connect to multiple databases across an organization, empowering users to analyze data using chat.
 - AI models can create 3D designs on Blender and print them out using a 3D printer.
 
-### MCP server primitives
+### MCP server Capabilities
 
-- **Tools**: Model-controlled. LLM decides when to call these and the results are used by the LLM. They are used to give additional functionality to the LLM.
-- **Resources**: App-controlled. Our App decides when to call these. Results are used primarily by our App. Resources are used for getting data into our App and adding context to messages.
-- **Prompts**: User-controlled: The user decides when to use these. Prompts are used for workflows to run based on user input, like a slash command, button click or menu option.
+#### 1. Tools
+
+Tools are functions that the LLM can invoke to perform specific actions.
+
+**Characteristics:**
+
+- Have unique names and descriptions
+- Define input parameters with JSON schemas
+- Can have annotations that can provice additional context or hints to the AI. These annotations can be pre-defined or custom.
+- Can be synchronous or asynchronous
+- Return structured results
+
+**Example:**
+
+```
+{
+  "name": "execute_command",
+  "description": "Execute shell command",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "command": {"type": "string"}
+    },
+    "required": ["command"]
+  },
+  // Optional annotations
+  "annotations": {
+   "destructive": true,        // Operation modifies/destroys data
+    "idempotent": false,       // Same operation gives different results
+    "readOnly": false,         // Operation doesn't modify state
+    "requiresConfirmation": true, // Client should ask user confirmation
+    "dangerous": true          // Potentially harmful operation
+    "category": "system",
+    "dangerous": true,
+    "requires_confirmation": true,
+    "version": "1.0.0",
+    "author": "example-org",
+    "tags": ["shell", "execution"]
+  }
+}
+```
+
+#### 2. Resources
+
+Resources provide access to specific data or content.
+
+**Characteristics:**
+
+- Identified by unique URIs
+- Can be files, URLs, databases
+- Support different MIME types
+- Allow read/write based on permissions
+
+**Example:**
+
+```
+{
+  "uri": "file://workspace/{path}",
+  "name": "Workspace Files",
+  "description": "Access to workspace files",
+  "mimeType": "text/plain",
+  "annotations": {
+    "readable": true,
+    "writable": true,
+    "parameters": {
+      "path": {
+        "type": "string",
+        "description": "File path relative to workspace"
+      }
+    }
+  }
+}
+```
+
+#### 3. Prompts (Templates)
+Predefined prompts that the client can use.
+
+**Characteristics:**
+
+- Reusable templates
+- Can have variable parameters
+- Facilitate common tasks
+- Maintain consistency
+
+**Example:**
+
+```
+{
+  "name": "code_review",
+  "description": "Review code for best practices and potential issues",
+  "arguments": [
+    {
+      "name": "code",
+      "description": "Code snippet to review",
+      "required": true
+    },
+    {
+      "name": "language",
+      "description": "Programming language",
+      "required": false
+    },
+    {
+      "name": "focus",
+      "description": "Review focus area (security, performance, style)",
+      "required": false
+    }
+  ]
+}
+```
+
+**Prompt usage:**
+
+```
+{
+  "prompt": "code_review",
+  "arguments": {
+    "code": "function calculateTotal(items) { return items.reduce((sum, item) => sum + item.price, 0); }",
+    "language": "javascript",
+    "focus": "performance"
+  }
+}
+```
 
 ### MCP Client and communication
 
@@ -399,7 +518,8 @@ The MCP server and client communicate by exchanging messages (the messages allow
 
 ## AI-Agents
 
-
 ## Test-time scaling vs data/size scaling
 
-## Pytorch (training and inference)
+## CLEAR - Concise/Logical/Explicit/Adaptative/Reflective
+
+## Evals (evaluation of performance)
